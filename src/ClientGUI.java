@@ -133,8 +133,8 @@ public class ClientGUI extends javax.swing.JFrame {
         try {
 
             ta_mensaje.setVisible(true);
-            Registry myreg = LocateRegistry.getRegistry("192.168.1.20", port);
-            FSInterface inter = (FSInterface) myreg.lookup("remoteObject");
+            myreg = LocateRegistry.getRegistry("192.168.1.20", port);
+            inter = (FSInterface) myreg.lookup("remoteObject");
             ta_mensaje.setText("Servicio Listo =)");
         } catch (Exception e) {
             ta_mensaje.setText("Something went wrong");
@@ -150,9 +150,7 @@ public class ClientGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             String ruta = JOptionPane.showInputDialog(this, "Ingrese ruta (Vacio es C:): ");
-            String nombre = JOptionPane.showInputDialog(this, "Ingrese nombre del directorio: ");            
-            Registry myreg = LocateRegistry.getRegistry("192.168.1.20", port);
-            FSInterface inter = (FSInterface) myreg.lookup("remoteObject");            
+            String nombre = JOptionPane.showInputDialog(this, "Ingrese nombre del directorio: ");             
             boolean bool = inter.createDirectory("./C/"+ruta+"/"+nombre);
             System.out.println("directory created :" + bool);
             if(!bool){
@@ -210,4 +208,6 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JTextArea ta_mensaje;
     // End of variables declaration//GEN-END:variables
     static int port = 6000;
+    static Registry myreg;
+    static FSInterface inter;
 }
