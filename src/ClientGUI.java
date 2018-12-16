@@ -50,13 +50,13 @@ public class ClientGUI extends javax.swing.JFrame {
         mensajeLayout.setHorizontalGroup(
             mensajeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mensajeLayout.createSequentialGroup()
+                .addGap(144, 144, 144)
+                .addComponent(jLabel2)
+                .addContainerGap(158, Short.MAX_VALUE))
+            .addGroup(mensajeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
-            .addGroup(mensajeLayout.createSequentialGroup()
-                .addGap(144, 144, 144)
-                .addComponent(jLabel2)
-                .addContainerGap(150, Short.MAX_VALUE))
         );
         mensajeLayout.setVerticalGroup(
             mensajeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -64,8 +64,8 @@ public class ClientGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(11, 11, 11)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -118,7 +118,7 @@ public class ClientGUI extends javax.swing.JFrame {
         try {
 
             ta_mensaje.setVisible(true);
-            Registry myreg = LocateRegistry.getRegistry(port);
+            Registry myreg = LocateRegistry.getRegistry("192.168.1.20",port);
             FSInterface inter = (FSInterface) myreg.lookup("remoteObject");
             ta_mensaje.setText("Servicio Listo =)");
         } catch (Exception e) {
