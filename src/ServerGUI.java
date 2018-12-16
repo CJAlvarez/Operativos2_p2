@@ -90,7 +90,7 @@ public class ServerGUI extends javax.swing.JFrame {
             
             Registry reg = LocateRegistry.createRegistry(port);   
 
-            rmiImplementation imp = new rmiImplementation("./C:");
+            rmiImplementation imp = new rmiImplementation("./C");
             reg.bind("remoteObject", imp);
             ta_status.setText("Server is up and running on port: " + port);
             
