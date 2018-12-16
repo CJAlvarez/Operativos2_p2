@@ -75,8 +75,8 @@ public class FS_Client implements Serializable {
 			if(dir.equals(args[0]))
 			{
 				serverpath = args[1];
-				String[] filelist = inter.listFiles(serverpath);
-				for (String i: filelist)
+				File[] filelist = inter.listFiles(serverpath);
+				for (File i: filelist)
 				{
 					System.out.println(i);
 				}

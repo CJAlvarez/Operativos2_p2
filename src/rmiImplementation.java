@@ -72,9 +72,9 @@ public class rmiImplementation extends UnicastRemoteObject implements FSInterfac
 
     }
 
-    public String[] listFiles(String serverpath) throws RemoteException {
+    public File[] listFiles(String serverpath) throws RemoteException {
         File serverpathdir = new File(serverpath);
-        return serverpathdir.list();
+        return serverpathdir.listFiles();
 
     }
 

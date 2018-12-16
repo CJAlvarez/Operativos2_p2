@@ -1,8 +1,12 @@
 
+import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -35,10 +39,11 @@ public class ClientGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         ta_mensaje = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
-        list1 = new java.awt.List();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jt_directory = new javax.swing.JTree();
         jButton3 = new javax.swing.JButton();
 
         ta_mensaje.setColumns(20);
@@ -88,6 +93,10 @@ public class ClientGUI extends javax.swing.JFrame {
             }
         });
 
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        jt_directory.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane3.setViewportView(jt_directory);
+
         jButton3.setText("Remove Dir");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -100,9 +109,17 @@ public class ClientGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(197, 197, 197)
+                .addComponent(jLabel1)
+                .addContainerGap(168, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jLabel1)
@@ -118,17 +135,17 @@ public class ClientGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(23, Short.MAX_VALUE)
-                        .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addGap(8, 8, 8)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -147,13 +164,22 @@ public class ClientGUI extends javax.swing.JFrame {
             myreg = LocateRegistry.getRegistry("192.168.1.20", port);
             inter = (FSInterface) myreg.lookup("remoteObject");
             ta_mensaje.setText("Servicio Listo =)");
+
+            mensaje.setModal(true);
+            mensaje.pack();
+            mensaje.setVisible(true);
+            mensaje.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            DefaultMutableTreeNode root = new DefaultMutableTreeNode("server:", true);
+            File[] files = inter.listFiles("./C");
+            System.out.println(files[0].getName());
+            fillTree(root, files[0].getParentFile());
+            tree = new JTree(root);
+            jt_directory.setModel(tree.getModel());
+            
+            
         } catch (Exception e) {
             ta_mensaje.setText("Something went wrong");
         }
-        mensaje.setModal(true);
-        mensaje.pack();
-        mensaje.setVisible(true);
-        mensaje.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
     }//GEN-LAST:event_jButton1MouseClicked
 
@@ -161,11 +187,17 @@ public class ClientGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             String ruta = JOptionPane.showInputDialog(this, "Ingrese ruta (Vacio es C:): ");
-            String nombre = JOptionPane.showInputDialog(this, "Ingrese nombre del directorio: ");             
-            boolean bool = inter.createDirectory("./C/"+ruta+"/"+nombre);
+            String nombre = JOptionPane.showInputDialog(this, "Ingrese nombre del directorio: ");
+            boolean bool = inter.createDirectory("./C/" + ruta + "/" + nombre);
             System.out.println("directory created :" + bool);
-            if(!bool){
-            JOptionPane.showMessageDialog(this,"El Directorio ya Existe! ");
+            DefaultMutableTreeNode root = new DefaultMutableTreeNode("server:", true);
+            File[] files = inter.listFiles("./C");
+            System.out.println(files[0].getName());
+            fillTree(root, files[0].getParentFile());
+            tree = new JTree(root);
+            jt_directory.setModel(tree.getModel());
+            if (!bool) {
+                JOptionPane.showMessageDialog(this, "El Directorio ya Existe! ");
             }
         } catch (Exception e) {
         }
@@ -222,6 +254,20 @@ public class ClientGUI extends javax.swing.JFrame {
             }
         });
     }
+    public void fillTree(DefaultMutableTreeNode dir, File f){
+        if (!f.isDirectory()) {
+            DefaultMutableTreeNode child = new DefaultMutableTreeNode(f.getName());
+            dir.add(child);
+        }else{
+            DefaultMutableTreeNode child = new DefaultMutableTreeNode(f.getName());
+            dir.add(child);
+            File fList[] = f.listFiles();
+            for (int i = 0; i < fList.length; i++) {
+                fillTree(child, fList[i]);
+            }
+        }
+    }                                                                                                                                                                                           
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -230,11 +276,13 @@ public class ClientGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private java.awt.List list1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTree jt_directory;
     private javax.swing.JDialog mensaje;
     private javax.swing.JTextArea ta_mensaje;
     // End of variables declaration//GEN-END:variables
     static int port = 6000;
     static Registry myreg;
     static FSInterface inter;
+    JTree tree;
 }
