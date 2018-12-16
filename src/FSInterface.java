@@ -5,6 +5,7 @@
  */
 
 
+import java.io.File;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -18,7 +19,7 @@ public interface FSInterface extends Remote {
 
     public byte[] downloadFileFromServer(String servername) throws RemoteException;
 
-    public String[] listFiles(String serverpath) throws RemoteException;
+    public File[] listFiles(String serverpath) throws RemoteException;
 
     public boolean createDirectory(String serverpath) throws RemoteException;
 
