@@ -2,13 +2,13 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author guill
@@ -38,6 +38,7 @@ public class ClientGUI extends javax.swing.JFrame {
         list1 = new java.awt.List();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         ta_mensaje.setColumns(20);
         ta_mensaje.setRows(5);
@@ -79,6 +80,13 @@ public class ClientGUI extends javax.swing.JFrame {
 
         jLabel1.setText("CLIENT");
 
+        jButton2.setText("Create Dir");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,13 +96,15 @@ public class ClientGUI extends javax.swing.JFrame {
                 .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2)
+                            .addComponent(jButton1))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,10 +113,15 @@ public class ClientGUI extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(23, Short.MAX_VALUE)
+                        .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
 
@@ -118,7 +133,7 @@ public class ClientGUI extends javax.swing.JFrame {
         try {
 
             ta_mensaje.setVisible(true);
-            Registry myreg = LocateRegistry.getRegistry("192.168.1.20",port);
+            Registry myreg = LocateRegistry.getRegistry("192.168.1.20", port);
             FSInterface inter = (FSInterface) myreg.lookup("remoteObject");
             ta_mensaje.setText("Servicio Listo =)");
         } catch (Exception e) {
@@ -128,8 +143,23 @@ public class ClientGUI extends javax.swing.JFrame {
         mensaje.pack();
         mensaje.setVisible(true);
         mensaje.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        
+
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        // TODO add your handling code here:
+        try {
+            String ruta = JOptionPane.showInputDialog(this, "Ingrese ruta (Vacio es C:): ");
+            String nombre = JOptionPane.showInputDialog(this, "Ingrese nombre del directorio: ");            
+            Registry myreg = LocateRegistry.getRegistry("192.168.1.20", port);
+            FSInterface inter = (FSInterface) myreg.lookup("remoteObject");            
+            boolean bool = inter.createDirectory("./C/"+ruta+"/"+nombre);
+            System.out.println("directory created :" + bool);
+        } catch (Exception e) {
+        }
+
+
+    }//GEN-LAST:event_jButton2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -168,6 +198,7 @@ public class ClientGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
