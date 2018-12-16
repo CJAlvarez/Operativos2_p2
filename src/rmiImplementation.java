@@ -80,6 +80,7 @@ public class rmiImplementation extends UnicastRemoteObject implements FSInterfac
 
     public boolean createDirectory(String serverpath) throws RemoteException {
         File serverpathdir = new File(serverpath);
+        
         return serverpathdir.mkdir();
 
     }
