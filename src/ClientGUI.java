@@ -179,6 +179,9 @@ public class ClientGUI extends javax.swing.JFrame {
             mensaje.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("server:", true);
             File[] files = inter.listFiles("./C");
+            for (int i = 0; i < files.length; i++) {
+                System.out.println(files[i].getName());
+            }
             System.out.println(files[0].getName());
             fillTree(root, files[0].getParentFile());
             tree = new JTree(root);
