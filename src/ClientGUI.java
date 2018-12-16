@@ -155,6 +155,9 @@ public class ClientGUI extends javax.swing.JFrame {
             FSInterface inter = (FSInterface) myreg.lookup("remoteObject");            
             boolean bool = inter.createDirectory("./C/"+ruta+"/"+nombre);
             System.out.println("directory created :" + bool);
+            if(!bool){
+            JOptionPane.showMessageDialog(this,"El Directorio ya Existe! ");
+            }
         } catch (Exception e) {
         }
 
